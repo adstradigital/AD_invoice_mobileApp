@@ -18,6 +18,7 @@ class Usermanagementsecondscreen extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Create User"),
         backgroundColor: Colors.blue,
       ),
@@ -215,7 +216,7 @@ class Usermanagementsecondscreen extends StatelessWidget {
                                           )
                                         : null,
                                     onTap: () {
-                                      rolecontroller.toggleRole(role['id'].toString());
+                                      rolecontroller.selectedRoleIds.value = [role['id'].toString()];
                                     },
                                   );
                                   })
@@ -230,7 +231,7 @@ class Usermanagementsecondscreen extends StatelessWidget {
                             ? Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Text(
-                                  "Please select at least one role",
+                                  "Please select a role",
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               )
@@ -250,6 +251,7 @@ class Usermanagementsecondscreen extends StatelessWidget {
                   label: "Discard", 
                   onpressed: () {
                     rolecontroller.clearSelections(); 
+                     rolecontroller.selectedRoleIds.clear();
                     Get.back();
                   }
                 ),
@@ -274,6 +276,7 @@ class Usermanagementsecondscreen extends StatelessWidget {
                       rolecontroller.clearSelections(); 
                       usermanagementcontroller.getus();
                       rolecontroller.clearSelections();
+                       
                     } else {
                       Get.snackbar("Sorry", "Please try again");
                     }

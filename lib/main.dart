@@ -1,9 +1,12 @@
 
+import 'package:ad_invoice_mobile/Service/permissionservice.dart';
 import 'package:ad_invoice_mobile/bindings/authDependencies.dart';
 import 'package:ad_invoice_mobile/bindings/clientDependencies.dart';
+import 'package:ad_invoice_mobile/bindings/miscDependencies.dart';
 import 'package:ad_invoice_mobile/bindings/productDependencies.dart';
 import 'package:ad_invoice_mobile/bindings/proposaldependencies.dart';
 import 'package:ad_invoice_mobile/bindings/usermanagementDependencies.dart';
+
 import 'package:ad_invoice_mobile/controllers/dropdowncontroller.dart';
 import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/loginscreen.dart';
@@ -14,12 +17,14 @@ import 'package:responsive_framework/responsive_framework.dart';
 void main() {
   Get.put(Dropdowncontroller());
   Get.put(Radiobuttoncontroller());
+ Get.lazyPut(() => PermissionService());
 
   Usermanagementdependencies.init();
   Proposaldependencies.init();
   Clientdependencies.init();
   Productdependencies.init();
   Authdependencies.init();
+  Miscdependencies.init();
   
   runApp(const MyApp());
 }

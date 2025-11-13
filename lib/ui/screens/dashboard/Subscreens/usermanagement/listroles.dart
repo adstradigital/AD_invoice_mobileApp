@@ -6,103 +6,166 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Listroles extends StatelessWidget {
-   Listroles({super.key});
+  Listroles({super.key});
 
-  final Rolecontroller rolecontroller=Get.find<Rolecontroller>();
+  final Rolecontroller rolecontroller = Get.find<Rolecontroller>();
 
   @override
   Widget build(BuildContext context) {
-    
-    
-   
-     final screenheight=MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar:AppBar(title: Text("User Management"),backgroundColor: Colors.blue,),
-      body: 
-      Column(
-        children: [
-          SizedBox(height: 20,),
-          Text("Roles",style: TextStyle(fontWeight: FontWeight.bold),),
-          Expanded(
-            child: SizedBox(
-                height: screenheight/2*1.3,
-                child:Obx(()=>ListView.builder(
-                  itemCount: rolecontroller.roles.length,
-                  itemBuilder: (context, index) {
-                    final role=rolecontroller.roles[index];
-                    return Card(
-                      elevation: 3,
-                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      child: ListTile(
-                       onLongPress:  () {
-                        Get.defaultDialog(
-                          title: "Delete Role",
-                          middleText: "Are you sure about deleting this Role? This action cannot be undone.",
-                          textConfirm: "Yes, Delete",
-                          textCancel: "Cancel",
-                          confirmTextColor: Colors.white,
-                          buttonColor: Colors.red,
-                          onConfirm: ()async {
-                            Get.back();
-                          await rolecontroller.deletero(role['id']);
-                       
-                          },
-                          onCancel: () {
-                            Get.back();
-                                },
-                              );
-                            },
-                        leading: CircleAvatar(
-                          
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.red[500],
-                          child: Icon(Icons.shield),
-                        ),
-                        title: Text(
-                          "${role['name']}",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        
-                       subtitle: Text("${role['description']}"),
-                        trailing: IconButton(onPressed: (){
-                         Get.to(()=>Editrole(),arguments: role['id']);
-                        }, icon: Icon(Icons.settings,color: Colors.black,)),
-                        
-                        onTap: () {
-                       
-                        },
-                      ),
-                    );
-                  },
-                ),)
-              ),
-          ),
-            SizedBox(height: 10,),
-           Column(
-            children: [
-              SizedBox(
-                width: 200,
-                child: ElevatedButton.icon(onPressed: (){
-                  Get.to(Createrolepage());
-                }, label: Text("Create new Role",style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                icon: Icon(Icons.shield_moon_sharp,color: Colors.red,),)
-              ),
-              SizedBox(height: 10,),
-              SizedBox(
-                width: 200,
-                child: Custombutton(label: "Back", onpressed: (){
-                  Get.back();
-                }),
-              )
-            ],
-          ),
+    final screenheight = MediaQuery.of(context).size.height;
 
-        ],
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: const Text(
+          "User Management",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blue[700],
+        elevation: 2,
       ),
-      
+
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            Text(
+              "Manage Roles",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue[900],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Divider(thickness: 1, color: Colors.grey[300]),
+
+            // 🔹 Role List
+            Expanded(
+              child: SizedBox(
+                height: screenheight / 2 * 1.3,
+                child: Obx(() => rolecontroller.roles.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.shield_moon_rounded,
+                                color: Colors.grey[400], size: 60),
+                            const SizedBox(height: 10),
+                            Text(
+                              "No roles available",
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: rolecontroller.roles.length,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final role = rolecontroller.roles[index];
+                          return Card(
+                            elevation: 3,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 6),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ListTile(
+                              onLongPress: () {
+                                Get.defaultDialog(
+                                  title: "Delete Role",
+                                  middleText:
+                                      "Are you sure you want to delete this role? This action cannot be undone.",
+                                  textConfirm: "Yes, Delete",
+                                  textCancel: "Cancel",
+                                  confirmTextColor: Colors.white,
+                                  buttonColor: Colors.red,
+                                  onConfirm: () async {
+                                    Get.back();
+                                    await rolecontroller.deletero(role['id']);
+                                  },
+                                  onCancel: () {
+                                    Get.back();
+                                  },
+                                );
+                              },
+                              leading: CircleAvatar(
+                                radius: 24,
+                                backgroundColor: Colors.blue[100],
+                                child: Icon(Icons.shield,
+                                    color: Colors.blue[700], size: 22),
+                              ),
+                              title: Text(
+                                "${role['name']}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 16),
+                              ),
+                              subtitle: Text(
+                                "${role['description'] ?? 'No description'}",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.settings,
+                                    color: Colors.black87),
+                                onPressed: () {
+                                  Get.to(() => Editrole(), arguments: role);
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      )),
+              ),
+            ),
+
+            const SizedBox(height: 12),
+            Divider(thickness: 1, color: Colors.grey[300]),
+            const SizedBox(height: 10),
+
+            // 🔹 Bottom Buttons
+            Column(
+              children: [
+                SizedBox(
+                  width: 220,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Get.to(Createrolepage());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[700],
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    icon: const Icon(Icons.add_moderator, color: Colors.white),
+                    label: const Text(
+                      "Create New Role",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: 220,
+                  child: Custombutton(
+                    label: "Back",
+                    onpressed: () {
+                      Get.back();
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
     );
   }
 }

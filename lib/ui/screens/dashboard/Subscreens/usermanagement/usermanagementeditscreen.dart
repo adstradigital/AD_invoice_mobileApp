@@ -35,11 +35,6 @@ class Usermanagementeditscreen extends StatelessWidget {
     .map<String>((role) => role['id'].toString())
     .toList();
     
-   
-
-    
-    print(user['id']);
-    print(user);
     
      return Scaffold(
       appBar: AppBar(
@@ -240,7 +235,7 @@ class Usermanagementeditscreen extends StatelessWidget {
                                           )
                                         : null,
                                     onTap: () {
-                                      rolecontroller.toggleRoleEdit(role['id'].toString());
+                                      rolecontroller.selectedRoleIdsedit.value = [role['id'].toString()];
                                     },
                                   );
                                   })
@@ -255,7 +250,7 @@ class Usermanagementeditscreen extends StatelessWidget {
                             ? Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Text(
-                                  "Please select at least one role",
+                                  "Please select a role",
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               )

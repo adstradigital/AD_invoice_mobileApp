@@ -1,4 +1,5 @@
 import 'package:ad_invoice_mobile/Service/roleservice.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/logincontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +11,7 @@ class Rolecontroller extends GetxController{
   void onInit() {
     listro();
     getpermi();
+    setCurrentRole();
     super.onInit();
   }
 
@@ -21,6 +23,35 @@ class Rolecontroller extends GetxController{
    var selectedPermissionIds = <String>[].obs;
    var selectedRoleIds = <String>[].obs;
    var selectedRoleIdsedit=<String>[].obs;
+  var currentUserRole = ''.obs;
+
+   void setCurrentRole() {
+    final Logincontroller logincontroller=Get.find<Logincontroller>();
+    currentUserRole.value =logincontroller.role.value ;
+  }
+
+  bool hasPermission(String permissionCode) {
+    try {
+      // Find the role that matches the current user's role name
+      final role = roles.firstWhere(
+        (r) => r['name'] == currentUserRole.value,
+
+        
+        orElse: () => null,
+      );
+
+      if (role == null) return false;
+
+      final rolePermissions = role['permissions'] as List;
+
+      
+      return rolePermissions.any((p) => p['code'] == permissionCode);
+      
+    } 
+    catch (e) {
+      return false;
+    }
+  }
 
   
 
@@ -55,6 +86,7 @@ bool isRoleSelectedEdit(String roleId) {
     selectedRoleIds.clear();
   }
   
+  
  
   int get selectedroleCount => selectedRoleIds.length;
   
@@ -86,6 +118,9 @@ bool isRoleSelectedEdit(String roleId) {
   final TextEditingController namecontroller=TextEditingController();
   final TextEditingController descriptioncontroller=TextEditingController();
 
+  final TextEditingController nameeditcontroller=TextEditingController();
+  final TextEditingController descriptioneditcontroller=TextEditingController();
+
 
   Future<void> createro()async{
 
@@ -95,13 +130,14 @@ bool isRoleSelectedEdit(String roleId) {
 
       final payload={
         
-      "name": namecontroller.text.trim(),
+      "name": namecontroller.text.trim().toLowerCase(),
       "description": descriptioncontroller.text.trim(),
        "permission_ids": permissionIds,
 
       };
 
       final response=await roleservice.createrole(payload);
+  
       issuccess.value=response['name']==namecontroller.text?true:false;
 
      
@@ -132,8 +168,6 @@ bool isRoleSelectedEdit(String roleId) {
 
       final response=await roleservice.listrole();
       roles.value=response;
-
-
 
     }
     catch(e)
@@ -187,6 +221,8 @@ bool isRoleSelectedEdit(String roleId) {
        
  
         final response=await roleservice.updaterole(payload, roleid);
+
+  
 
         issuccess.value=response['name']==namecontroller.text?true:false;
 

@@ -36,7 +36,6 @@ class Usermanagementcontroller extends GetxController{
 
     try{
       isloading.value=true;
-
       final payload={
         "username": usernamecontroller.text,
         "email": emailcontroller.text,
@@ -49,6 +48,8 @@ class Usermanagementcontroller extends GetxController{
 
 
       final response=await usermanagementservice.createuser(payload);
+
+   
      
 
       issuccess.value=response['message']=="User created successfully"?true:false;
@@ -75,6 +76,7 @@ class Usermanagementcontroller extends GetxController{
 
       users.value=response['results'];
 
+
       //userid.value=users['id'];
       
   
@@ -95,12 +97,14 @@ class Usermanagementcontroller extends GetxController{
 
     
       final response=await usermanagementservice.deleteuser(userid);
-      print(response);
+
+      //tenent id issue here,not resolved
+  
 
     }
     catch(e)
     {
-      print("error in deleting $e");
+      Get.snackbar("Error", "$e");
     }
     finally{
       isloading.value=false;
@@ -110,7 +114,7 @@ class Usermanagementcontroller extends GetxController{
   Future<void> updateus(int userid)async{
     try{
       isloading.value=true;
-
+      
       final payload={
          "username": usernameeditcontroller.text.trim(),
   "email": emaileditcontroller.text.trim(),
@@ -121,10 +125,13 @@ class Usermanagementcontroller extends GetxController{
       };
 
       final response=await usermanagementservice.updateuser(payload,userid);
-      print(response);
+
+    
+
+    
       
      
-      issuccess.value=response['username']==usernamecontroller.text?true:false;
+      issuccess.value=response['username']==usernameeditcontroller.text?true:false;
 
        if (issuccess.value) {
     

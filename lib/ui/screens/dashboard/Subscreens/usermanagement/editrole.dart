@@ -11,6 +11,14 @@ class Editrole extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args=Get.arguments;
+    final role=args;
+
+    rolecontroller.nameeditcontroller.text=role['name'];
+    rolecontroller.descriptioneditcontroller.text=role['description'];
+      rolecontroller.selectedPermissionIds.value = 
+      (role['permissions'] as List)
+          .map<String>((perm) => perm['id'].toString())
+          .toList();
     
     return Scaffold(
   appBar: AppBar(
@@ -30,7 +38,7 @@ class Editrole extends StatelessWidget {
           ),
           SizedBox(height: 8),
           TextFormField(
-            controller: rolecontroller.namecontroller,
+            controller: rolecontroller.nameeditcontroller,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "This field is required";
@@ -55,7 +63,7 @@ class Editrole extends StatelessWidget {
           ),
           SizedBox(height: 8),
           TextFormField(
-            controller: rolecontroller.descriptioncontroller,
+            controller: rolecontroller.descriptioneditcontroller,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "This field is required";
@@ -94,68 +102,81 @@ class Editrole extends StatelessWidget {
               },
               child: Text("(See permissions)",style: TextStyle(fontSize: 14, color: Colors.blue[300],fontWeight: FontWeight.bold),),
             ),
-            
+          
             ],
           ),
           SizedBox(height: 8),
           
          
           Expanded(
-            child: Obx(() => rolecontroller.permission.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.list_alt, size: 64, color: Colors.grey),
-                        SizedBox(height: 16),
-                        Text(
-                          "No permissions available",
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
-                    itemCount: rolecontroller.permission.length,
-                    itemBuilder: (context, index) {
-                      final permi = rolecontroller.permission[index];
-                      return Card(
-                        elevation: 2,
-                        margin: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: ListTile(
-                                  leading: Obx(() => Icon(
-                                    rolecontroller.selectedPermissionIds.contains(permi['id'].toString())
-                                        ? Icons.check_circle
-                                        : Icons.radio_button_unchecked,
-                                    color: rolecontroller.selectedPermissionIds.contains(permi['id'].toString())
-                                        ? Colors.green
-                                        : Colors.grey,
-                                    size: 28,
-                                  )),
-                                  title: Text(
-                                    "${permi['code']}",
-                                    style: TextStyle(fontWeight: FontWeight.w500),
-                                  ),
-
-                                  onTap: () {
-                                    rolecontroller.togglePermission(permi['id'].toString());
-                                  },
-                                ),
-                                
-                      );
-                    },
-                  ),
-            ),
+  child: Obx(() => rolecontroller.permission.isEmpty
+      ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.list_alt, size: 64, color: Colors.grey),
+              SizedBox(height: 16),
+              Text(
+                "No permissions available",
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+            ],
           ),
+        )
+      : ListView.builder(
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          itemCount: rolecontroller.permission.length,
+          itemBuilder: (context, index) {
+            final permi = rolecontroller.permission[index];
+            final permId = permi['id'].toString();
+
+            // 🔹 Wrap inside a smaller Obx for reactivity
+            return Obx(() {
+              final isSelected =
+                  rolecontroller.selectedPermissionIds.contains(permId);
+
+              return Card(
+                elevation: 2,
+                margin: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: Icon(
+                    isSelected
+                        ? Icons.check_circle
+                        : Icons.radio_button_unchecked,
+                    color: isSelected ? Colors.green : Colors.grey,
+                    size: 28,
+                  ),
+                  title: Text(
+                    "${permi['code']}",
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () {
+                    rolecontroller.togglePermission(permId);
+                  },
+                ),
+              );
+            });
+          },
+        ),
+  ),
+),
           
           SizedBox(height: 20),
           
-        
+         Obx((){
+              final count=rolecontroller.selectedPermissionIds.length;
+
+              return Text(
+                count<1?
+                "No permission selected":"${rolecontroller.selectedPermissionIds.length} permissions selected",
+                 style: TextStyle(fontWeight: FontWeight.bold, color:count<1? Colors.red[800]:Colors.blue[800]),
+               );
+         }),
+         
           Center(
             child: SizedBox(
               width: double.infinity,
@@ -164,8 +185,8 @@ class Editrole extends StatelessWidget {
                 label: "Save Changes", 
                 onpressed: () async {
               
-                  if (rolecontroller.namecontroller.text.isEmpty || 
-                      rolecontroller.descriptioncontroller.text.isEmpty) {
+                  if (rolecontroller.nameeditcontroller.text.isEmpty || 
+                      rolecontroller.descriptioneditcontroller.text.isEmpty) {
                     Get.snackbar(
                       "Missing Fields",
                       "Please fill all required fields",
@@ -190,6 +211,7 @@ class Editrole extends StatelessWidget {
               ),
             ),
           ),
+           
         ],
       ),
     ),

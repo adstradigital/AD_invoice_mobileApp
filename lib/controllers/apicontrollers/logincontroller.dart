@@ -1,10 +1,14 @@
 import 'package:ad_invoice_mobile/Service/loginservice.dart';
+import 'package:ad_invoice_mobile/Service/permissionservice.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/rolecontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Logincontroller extends GetxController{
 
   final Loginservice loginservice=Get.find<Loginservice>();
+ 
+ 
 
   TextEditingController usernamecontroller=TextEditingController();
   TextEditingController passwordcontroller=TextEditingController();
@@ -29,13 +33,21 @@ class Logincontroller extends GetxController{
         };
         final response=await loginservice.loginuser(payload);
 
+        role.value=response['role'];
+        
+       
+
+        
+      
+        
+
         if(response['access']!=null)
         {
           accesstoken.value=response['access'];
           userid.value=response['user_id'];
           tenantid.value=response['tenant_id'];
-          role.value=response['role'];
-          print(role);
+        
+    
         }
 
 
@@ -64,6 +76,8 @@ class Logincontroller extends GetxController{
       }
   
   }
+
+
   @override
   void onClose() {
     usernamecontroller.dispose();
@@ -75,4 +89,6 @@ class Logincontroller extends GetxController{
     usernamecontroller.clear();
     passwordcontroller.clear();
   }
+
+  
 }

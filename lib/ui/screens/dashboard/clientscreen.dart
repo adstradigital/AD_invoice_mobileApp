@@ -1,4 +1,5 @@
 import 'package:ad_invoice_mobile/controllers/apicontrollers/listclientcontroller.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/rolecontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/addnewclientscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/clientfulldetails.dart';
@@ -8,7 +9,8 @@ import 'package:get/get.dart';
 class Clientscreen extends StatelessWidget {
   Clientscreen({super.key});
 
-  final Listclientcontroller listclientcontroller = Get.put(Listclientcontroller());
+  final Listclientcontroller listclientcontroller = Get.find<Listclientcontroller>();
+    final Rolecontroller rolecontroller = Get.find<Rolecontroller>();
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +123,8 @@ class Clientscreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          trailing: IconButton(
+                          trailing: rolecontroller.hasPermission('update_client')
+                              ?IconButton(
                             onPressed: () {
                               Get.to(() => Addnewclientscreen());
                             },
@@ -130,9 +133,17 @@ class Clientscreen extends StatelessWidget {
                               color: Colors.blue[600],
                               size: 20,
                             ),
-                          ),
+                          ):Icon(Icons.edit_off, color: Colors.grey[500], size: 20),
                           onTap: () {
-                            Get.to(() => Clientfulldetails(), arguments: client);
+                           if(rolecontroller.hasPermission('view_client'))
+                           {
+                             Get.to(() => Clientfulldetails(), arguments: client);
+                           }
+                           else{
+                            Get.snackbar("Permission Denied", "No permission to view client details",
+                            backgroundColor: Colors.red[50],
+                            colorText: Colors.red[700],);
+                           }
                           },
                         ),
                       ),
@@ -143,18 +154,41 @@ class Clientscreen extends StatelessWidget {
         ),
 
         // Add Client Button
-        Container(
-          padding: EdgeInsets.all(16),
-          child: SizedBox(
-            width: double.infinity,
-            child: Custombutton(
-              label: "Add New Client", 
-              onpressed: () {
-                Get.to(() => Addnewclientscreen());
-              }
-            ),
+      rolecontroller.hasPermission('create_client')
+  ? Container(
+      padding: EdgeInsets.all(16),
+      child: SizedBox(
+        width: double.infinity,
+        child: Custombutton(
+          label: "Add New Client",
+          onpressed: () {
+            Get.to(() => Addnewclientscreen());
+          },
+        ),
+      ),
+    )
+  : Container(
+      padding: EdgeInsets.all(16),
+      child: SizedBox(
+        width: double.infinity,
+        child: Opacity( 
+          opacity: 0.5,
+          child: Custombutton(
+            label: "No Permission",
+            onpressed: () {
+              Get.snackbar(
+                "Permission Denied",
+                "You don’t have permission to add clients.",
+                backgroundColor: Colors.red[50],
+                colorText: Colors.red[700],
+                snackPosition: SnackPosition.BOTTOM,
+              );
+            },
           ),
-        )
+        ),
+      ),
+    )
+        
       ],
     );
   }

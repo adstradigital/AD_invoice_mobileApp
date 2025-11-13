@@ -36,7 +36,8 @@ class Usermanagementservice extends GetConnect{
     final response=await delete("users/user/$userid/delete/",headers: {
       'Authorization':'Bearer ${logincontroller.accesstoken.value}',
       
-    }, 
+      
+    }, ///tenant id issue here,not resolved yet
     
    
     );
