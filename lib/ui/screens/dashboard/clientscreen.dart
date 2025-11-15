@@ -3,6 +3,7 @@ import 'package:ad_invoice_mobile/controllers/apicontrollers/rolecontroller.dart
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/addnewclientscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/clientfulldetails.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/editclientscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -126,14 +127,15 @@ class Clientscreen extends StatelessWidget {
                           trailing: rolecontroller.hasPermission('update_client')
                               ?IconButton(
                             onPressed: () {
-                              Get.to(() => Addnewclientscreen());
+                              Get.to(() => Editclientscreen(),arguments: client);
                             },
                             icon: Icon(
                               Icons.edit,
                               color: Colors.blue[600],
                               size: 20,
                             ),
-                          ):Icon(Icons.edit_off, color: Colors.grey[500], size: 20),
+                          ):
+                          Icon(Icons.edit_off, color: Colors.grey[500], size: 20),
                           onTap: () {
                            if(rolecontroller.hasPermission('view_client'))
                            {

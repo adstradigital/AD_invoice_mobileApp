@@ -133,6 +133,7 @@ class Listroles extends StatelessWidget {
                   width: 220,
                   child: ElevatedButton.icon(
                     onPressed: () {
+                      rolecontroller.selectedPermissionIds.clear();
                       Get.to(Createrolepage());
                     },
                     style: ElevatedButton.styleFrom(

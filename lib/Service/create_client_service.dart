@@ -25,4 +25,19 @@ class CreateClientService extends GetConnect {
       throw 'Unable to create client $e';
     }
   }
+
+  Future<dynamic> updateclient(Map<String,dynamic> data,String userid)async{
+
+    try{
+      var response=await put("clients/update/$userid/", data,headers: {
+         'Authorization':'Bearer ${logincontroller.accesstoken.value}'
+      });
+      return response.body;
+    }
+    catch(e)
+    {
+      throw e;
+    }
+  }
+  
 }

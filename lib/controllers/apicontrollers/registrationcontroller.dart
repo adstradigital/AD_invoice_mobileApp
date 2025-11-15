@@ -10,6 +10,10 @@ class Registrationcontroller extends GetxController{
   var appid=0.obs;
   var isloading=false.obs;
   var isunderage=false.obs;
+  var issuccess=false.obs;
+  var otpvalue=''.obs;
+  var enteredotp=''.obs;
+  
 
   final firstnamecontroller=TextEditingController();
   final lastnamecontroller=TextEditingController();
@@ -18,6 +22,9 @@ class Registrationcontroller extends GetxController{
   final addresscontroller=TextEditingController();
   final dobcontroller=TextEditingController();
   final companycontroller=TextEditingController();
+
+  final otpphonecontroller=TextEditingController();
+  final otpverifycontroller=TextEditingController();
 
   Future<void> register()async{
     if(isloading.value) return;
@@ -97,6 +104,41 @@ class Registrationcontroller extends GetxController{
         
       }
       dobcontroller.text="${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+    }
+  }
+
+  Future<void> sendot()async{
+
+    try{
+      isloading.value=true;
+
+      final payload={
+        "phone":otpphonecontroller.text.trim(),
+      };
+
+     
+
+      final response=await registerservice.sendotp(payload);
+     
+
+     
+
+      otpvalue.value=response['debug_otp'];
+
+      issuccess.value = response['success']
+        .toString()
+        .toLowerCase()
+        .contains("otp sent successfully");
+
+
+   
+    }
+    catch(e)
+    {
+      Get.snackbar("Error sending otp", "$e");
+    }
+    finally{
+      isloading.value=false;
     }
   }
 

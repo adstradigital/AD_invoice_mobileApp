@@ -6,9 +6,9 @@ import 'package:ad_invoice_mobile/ui/screens/auth/registerscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicefirstscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalfirstscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/receipt/receiptfirstscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/addnewclientscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/clientscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/homescreen.dart';
-import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/profilescreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/reportscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/itemscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/settingscreen.dart';
@@ -53,7 +53,7 @@ class Dashboardmain extends StatelessWidget {
         ),
         child: IconButton(
           onPressed: () {
-            Get.to(() => Profilescreen());
+            Get.to(() => Addnewclientscreen());
           },
           icon: Icon(Icons.person_outline, size: 18),
           tooltip: "Profile",
@@ -259,7 +259,7 @@ class Dashboardmain extends StatelessWidget {
   spacing: 8,
   children:[
     rolecontroller.hasPermission('create_invoice')
-        ? SpeedDialChild(
+        ? SpeedDialChild( 
             backgroundColor: Colors.blue[700]!.withOpacity(0.9),
             foregroundColor: Colors.white,
             label: "New Invoice",

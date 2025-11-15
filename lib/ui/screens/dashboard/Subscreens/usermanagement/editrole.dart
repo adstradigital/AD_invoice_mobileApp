@@ -131,7 +131,7 @@ class Editrole extends StatelessWidget {
             final permi = rolecontroller.permission[index];
             final permId = permi['id'].toString();
 
-            // 🔹 Wrap inside a smaller Obx for reactivity
+            //  Wrap inside a smaller Obx for reactivity
             return Obx(() {
               final isSelected =
                   rolecontroller.selectedPermissionIds.contains(permId);
@@ -172,7 +172,7 @@ class Editrole extends StatelessWidget {
 
               return Text(
                 count<1?
-                "No permission selected":"${rolecontroller.selectedPermissionIds.length} permissions selected",
+                "*No permission selected":"${rolecontroller.selectedPermissionIds.length} permissions selected",
                  style: TextStyle(fontWeight: FontWeight.bold, color:count<1? Colors.red[800]:Colors.blue[800]),
                );
          }),

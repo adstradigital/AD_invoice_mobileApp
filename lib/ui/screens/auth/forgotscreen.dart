@@ -1,48 +1,20 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/registrationcontroller.dart';
+import 'package:ad_invoice_mobile/ui/screens/auth/loginscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/messagescreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/customforfield.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/get_core.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-class Forgotscreen extends StatefulWidget {
-  const Forgotscreen({super.key});
+class Forgotscreen extends StatelessWidget {
+  Forgotscreen({super.key});
 
-  @override
-  State<Forgotscreen> createState() => _ForgotscreenState();
-}
+  
 
-class _ForgotscreenState extends State<Forgotscreen> {
-
-  final TextEditingController textEditingController=TextEditingController();
-  String _otp="3322";
-  String _message="";
-
-  void sendotp()
-  {
-    setState(() {
-      _otp=3322.toString();
-      _message="OTP send to your mail!";
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_message)));
-      textEditingController.clear();
-    });
-
-  }
-
-  void verify(){
-    if(textEditingController.text == _otp)
-    {
-      setState(() {
-        _message="✅ OTP is correct!";
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_message)));
-    }
-    else{
-      setState(() {
-        _message="❌ OTP is incorrect!";
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_message)));
-    }
-  }
+  final Registrationcontroller registrationcontroller=Get.find<Registrationcontroller>();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -75,58 +47,18 @@ class _ForgotscreenState extends State<Forgotscreen> {
         const SizedBox(height: 10),
 
         Text(
-          "Enter your email and mobile to verify",
+          "Enter mobile to verify",
           style: TextStyle(fontStyle: FontStyle.italic, fontSize: isMobile ? 14 : 16),
         ),
 
         const SizedBox(height: 20),
-
-        /// Email + OTP row
-        Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Customforfield(
-                hinttext: "example@mail.com",
-                prefixicon: Icons.mail,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              flex: 1,
-              child: Custombutton(label: "OTP", onpressed: () {
-                sendotp();
-              }),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 20),
-
-        /// Email OTP input
-        Customforfield(
-          controller: textEditingController,
-          hinttext: "Enter the OTP",
-          prefixicon: Icons.near_me,
-          onchanged: (value)
-          {
-            if(value.length==4)
-            {
-              verify();
-            }
-          },
-          
-        ),
-
-
-        const SizedBox(height: 20),
-
         /// Mobile + OTP row
         Row(
           children: [
             Expanded(
               flex: 3,
               child: Customforfield(
+                controller: registrationcontroller.otpphonecontroller,
                 hinttext: "Enter your mobile",
                 prefixicon: Icons.phone_android,
               ),
@@ -134,7 +66,20 @@ class _ForgotscreenState extends State<Forgotscreen> {
             const SizedBox(width: 10),
             Expanded(
               flex: 1,
-              child: Custombutton(label: "OTP", onpressed: () {}),
+              child: Custombutton(label: "OTP", onpressed: ()async {
+
+                await registrationcontroller.sendot();
+                   if(registrationcontroller.issuccess.value)
+      {
+        Get.snackbar("Otp has send", "Please check your messages",backgroundColor: Colors.green[200],
+        icon: Icon(Icons.verified),
+        );
+        
+      }
+      else{
+        Get.snackbar("Error sending otp", "Try again");
+      }
+              }),
             ),
           ],
         ),
@@ -142,23 +87,67 @@ class _ForgotscreenState extends State<Forgotscreen> {
         const SizedBox(height: 20),
 
         /// Mobile OTP input
-        Customforfield(
-          hinttext: "Enter the OTP",
-          prefixicon: Icons.near_me,
-        ),
+       TextFormField(
+        onChanged: (value) => {
+          registrationcontroller.enteredotp.value=value
+        },
+controller: registrationcontroller.otpverifycontroller,
+decoration: InputDecoration(
+  fillColor: Colors.grey[350],
+  filled: true,
+  hintText: "Enter otp",
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(20),
+  ),
+  
+),
+       ),
 
         const SizedBox(height: 40),
 
         /// Submit button
-        SizedBox(
+      Obx(() {
+  bool isMatch = registrationcontroller.enteredotp.value.trim().isNotEmpty &&
+               registrationcontroller.enteredotp.value.trim() ==
+               registrationcontroller.otpvalue.value.trim();
+
+  return isMatch
+      ? SizedBox(
           width: double.infinity,
           child: Custombutton(
             label: "Submit",
             onpressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const Messagescreen()));
+           
+           Get.to(Loginscreen());
+           registrationcontroller.otpphonecontroller.clear();
+           registrationcontroller.otpphonecontroller.clear();
+              
             },
           ),
+        )
+      : SizedBox(
+  width: double.infinity,
+  child: Opacity(
+    opacity: 0.2, 
+    child: ElevatedButton(
+      
+      onPressed: null, // DISABLED
+      style: ElevatedButton.styleFrom(
+        
+        backgroundColor: Colors.blue,
+        padding: EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
+      ),
+      child: Text(
+        "Submit",
+        style: TextStyle(fontSize: 16),
+      ),
+    ),
+  ),
+);
+})
       ],
     );
 
@@ -192,20 +181,6 @@ class _ForgotscreenState extends State<Forgotscreen> {
                         elevation: 8,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: SizedBox(
-                            width: ResponsiveValue<double>(
-                              context,
-                              defaultValue: MediaQuery.of(context).size.width * 0.8,
-                              conditionalValues: [
-                                Condition.smallerThan(name: TABLET, value: MediaQuery.of(context).size.width * 0.9),
-                                Condition.largerThan(name: DESKTOP, value: 600),
-                              ],
-                            ).value,
-                            child: forgotForm,
-                          ),
                         ),
                       ),
                     ),

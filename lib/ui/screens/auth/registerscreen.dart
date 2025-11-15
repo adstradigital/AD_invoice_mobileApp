@@ -1,228 +1,195 @@
 import 'package:ad_invoice_mobile/controllers/apicontrollers/registrationcontroller.dart';
-import 'package:ad_invoice_mobile/ui/screens/auth/forgotscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/loginscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
-import 'package:ad_invoice_mobile/ui/screens/auth/widgets/customforfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart' as responsive;
 
 class Registerscreen extends StatelessWidget {
- const Registerscreen({super.key});
-
-  
+  const Registerscreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Registrationcontroller registrationcontroller =
+        Get.put(Registrationcontroller());
 
-
-    Registrationcontroller registrationcontroller=Get.put(Registrationcontroller());
-    final bool isMobile = responsive.ResponsiveBreakpoints.of(context).smallerThan(responsive.TABLET);
-
-    Widget registerForm = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-       
-        Image.asset(
-          'assets/logo.png',
-          width: isMobile ? 120 : 180,
-          height: 150,
-          fit: BoxFit.contain,
-        ),
-
-        const SizedBox(height: 10),
-
-    
-        Text(
-          "Greetings, we are excited for a new partnership",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold,
-            fontSize: isMobile ? 14 : 18,
-          ),
-        ),
-
-        const SizedBox(height: 30),
-
-        
-        Text(
-          "Register",
-          style: TextStyle(
-            color: Colors.grey,
-            fontSize: isMobile ? 18 : 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-
-        const SizedBox(height: 20),
-
-        
-        TextField(
-          controller: registrationcontroller.firstnamecontroller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: "Enter you first name",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            )
-          ),
-        ),
-        const SizedBox(height: 10),
-        TextField(
-          controller: registrationcontroller.lastnamecontroller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: "Enter you Last name",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            )
-          ),
-        ),
-        const SizedBox(height: 10),
-        TextField(
-          controller: registrationcontroller.emailcontroller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: "Enter you Email",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            )
-          ),
-        ),
-        const SizedBox(height: 10),
-        TextField(
-          controller: registrationcontroller.phonecontroller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: "Enter you Phone",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            )
-          ),
-        ),
-        const SizedBox(height: 10),
-        TextField(
-          controller: registrationcontroller.addresscontroller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: "Enter you Address",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            )
-          ),
-        ),
-        const SizedBox(height: 10),
-        TextField(
-          onTap: ()=>registrationcontroller.pickdate(),
-          controller: registrationcontroller.dobcontroller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            
-            hintText: "Enter Dob",
-            suffixIcon: Icon(Icons.calendar_month,color: Colors.blue,),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            )
-          ),
-        ),
-       
-        const SizedBox(height: 10),
-        TextField(
-          controller: registrationcontroller.companycontroller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: "Enter you Company name",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            )
-          ),
-        ),
-        const SizedBox(height: 40),
-
-       
-        SizedBox(
-          width: double.infinity,
-          child: Custombutton(
-            label: "Next",
-            onpressed: () {
-             registrationcontroller.isunderage.value?Get.snackbar("Could not register", "You are under 18",icon: Icon(Icons.error),backgroundColor: Colors.red[300]): registrationcontroller.register();
-            },
-          ),
-        ),
-        Obx(()=>registrationcontroller.isloading.value?CircularProgressIndicator():SizedBox.shrink()),
-        
-
-        const SizedBox(height: 20),
-
-       
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Loginscreen()));
-          },
-          child: const Text(
-            "Already have an account?",
-            style: TextStyle(color: Colors.blue),
-          ),
-        ),
-      ],
-    );
+    final bool isMobile =
+        responsive.ResponsiveBreakpoints.of(context).smallerThan(responsive.TABLET);
 
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
+
       body: Stack(
         children: [
-          
+          /// Background
           Positioned.fill(
             child: Image.asset(
               "assets/finance.jpg",
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
+              color: Colors.black.withOpacity(0.35),
+              colorBlendMode: BlendMode.darken,
             ),
           ),
 
-         
-          Align(
-            alignment: const Alignment(0, -0.7),
+          Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
-              child: isMobile
-                  ? registerForm
-                  : Center(
-                      child: Card(
-                        color: Colors.black.withOpacity(0.5),
-                        elevation: 8,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: isMobile ? 380 : 450,
+                ),
+
+                /// Main Card
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.09),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white.withOpacity(0.15)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.25),
+                        blurRadius: 12,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      /// Logo
+                      Image.asset(
+                        'assets/logo.png',
+                        width: 120,
+                        height: 120,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      Text(
+                        "We are excited for a new partnership",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey[200],
+                          fontSize: 15,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: SizedBox(
-                            width: responsive.ResponsiveValue<double>(
-                              context,
-                              defaultValue: MediaQuery.of(context).size.width * 0.8,
-                              conditionalValues: [
-                                responsive.Condition.smallerThan(name: responsive.TABLET, value: MediaQuery.of(context).size.width * 0.9),
-                                responsive.Condition.largerThan(name: responsive.DESKTOP, value: 600),
-                              ],
-                            ).value,
-                            child: registerForm,
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      Text(
+                        "Register",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 0.7,
+                        ),
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      /// Form Fields
+                      _buildField(
+                        controller: registrationcontroller.firstnamecontroller,
+                        hint: "Enter your First Name",
+                      ),
+
+                      _buildField(
+                        controller: registrationcontroller.lastnamecontroller,
+                        hint: "Enter your Last Name",
+                      ),
+
+                      _buildField(
+                        controller: registrationcontroller.emailcontroller,
+                        hint: "Enter your Email",
+                      ),
+
+                      _buildField(
+                        controller: registrationcontroller.phonecontroller,
+                        hint: "Enter your Phone",
+                      ),
+
+                      _buildField(
+                        controller: registrationcontroller.addresscontroller,
+                        hint: "Enter your Address",
+                      ),
+
+                      TextField(
+                        onTap: () => registrationcontroller.pickdate(),
+                        controller: registrationcontroller.dobcontroller,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: "Enter DOB",
+                          hintStyle: TextStyle(color: Colors.grey[300]),
+                          suffixIcon: const Icon(Icons.calendar_month, color: Colors.blue),
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.12),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
                           ),
                         ),
                       ),
-                    ),
+
+                      const SizedBox(height: 12),
+
+                      _buildField(
+                        controller: registrationcontroller.companycontroller,
+                        hint: "Enter your Company Name",
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: Custombutton(
+                          label: "Next",
+                          onpressed: () {
+                            registrationcontroller.isunderage.value
+                                ? Get.snackbar(
+                                    "Could not register",
+                                    "You are under 18",
+                                    icon: const Icon(Icons.error),
+                                    backgroundColor: Colors.red[300],
+                                  )
+                                : registrationcontroller.register();
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      Obx(() => registrationcontroller.isloading.value
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const SizedBox.shrink()),
+
+                      const SizedBox(height: 15),
+
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => Loginscreen())),
+                        child: const Text(
+                          "Already have an account?",
+                          style: TextStyle(
+                            color: Colors.lightBlueAccent,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -235,9 +202,30 @@ class Registerscreen extends StatelessWidget {
           child: Text(
             "© 2025 ADSTRA DIGITAL",
             style: TextStyle(
-              color: const Color.fromARGB(255, 43, 40, 40),
+              color: Colors.white70,
               fontSize: isMobile ? 12 : 14,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Simple clean form-field wrapper (using existing widgets)
+  Widget _buildField({required TextEditingController controller, required String hint}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextField(
+        controller: controller,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(color: Colors.grey[300]),
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
           ),
         ),
       ),

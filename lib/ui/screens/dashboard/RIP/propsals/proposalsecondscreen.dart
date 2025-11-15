@@ -1,6 +1,5 @@
 import 'package:ad_invoice_mobile/controllers/proposalsecondscreencontroller.dart';
-import 'package:ad_invoice_mobile/controllers/productcontroller.dart';
-import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
+
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/product_serviceedit.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalpreviewscreen.dart';

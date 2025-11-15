@@ -18,6 +18,7 @@ class Rolecontroller extends GetxController{
  
   var issuccess=false.obs;
   var roles=[].obs;
+ 
   var isloading=false.obs;
   var permission=[].obs;
    var selectedPermissionIds = <String>[].obs;
@@ -43,8 +44,6 @@ class Rolecontroller extends GetxController{
       if (role == null) return false;
 
       final rolePermissions = role['permissions'] as List;
-
-      
       return rolePermissions.any((p) => p['code'] == permissionCode);
       
     } 

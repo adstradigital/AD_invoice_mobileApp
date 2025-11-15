@@ -157,6 +157,15 @@ class Createrolepage extends StatelessWidget {
           
           SizedBox(height: 20),
           
+          Obx((){
+              final count=rolecontroller.selectedPermissionIds.length;
+
+              return Text(
+                count<1?
+                "*No permission selected":"${rolecontroller.selectedPermissionIds.length} permissions selected",
+                 style: TextStyle(fontWeight: FontWeight.bold, color:count<1? Colors.red[800]:Colors.blue[800]),
+               );
+         }),
         
           Center(
             child: SizedBox(

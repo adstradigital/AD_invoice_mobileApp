@@ -8,7 +8,8 @@ import 'package:ad_invoice_mobile/bindings/proposaldependencies.dart';
 import 'package:ad_invoice_mobile/bindings/usermanagementDependencies.dart';
 
 import 'package:ad_invoice_mobile/controllers/dropdowncontroller.dart';
-import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
+
+import 'package:ad_invoice_mobile/ui/screens/auth/launchscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/loginscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +17,6 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
   Get.put(Dropdowncontroller());
-  Get.put(Radiobuttoncontroller());
  Get.lazyPut(() => PermissionService());
 
   Usermanagementdependencies.init();
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
   
 ),
 
-      home:Loginscreen(),
+      home:Launchscreen(),
     );
   }
 }

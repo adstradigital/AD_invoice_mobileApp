@@ -57,7 +57,7 @@ class Createclientcontroller extends GetxController{
       };
 
       final response=await createClientService.createclient(payload);
-      print("the response is $response");
+
        if (response['success'] == null) {
         issucess.value = false;
         } else {
@@ -81,6 +81,47 @@ class Createclientcontroller extends GetxController{
     finally{
       isloading.value=false;
     }
+  }
+
+  Future<void> updateclient(String userid)async{
+      try{
+        isloading.value=true;
+
+        final payload={
+        "tenant":logincontroller.tenantid.value,
+       "name": clientnamecontroller.text.trim(),
+        "industry":industrycontroller.text.trim(),
+       "website": websitecontroller.text.trim(),
+       "registration_number": registercontroller.text.trim(),
+       "tax_id":taxcontroller.text.trim(),
+       "address_line1": addresscontroller.text.trim(),
+       "address_line2":addresscontroller2.text.trim(),
+        "city": citycontroller.text.trim(),
+       "state": statecontroller.text.trim(),
+        "country":countrycontroller.text.trim(),
+        "postal_code":postalcontroller.text.trim(),
+        "phone":phonecontroller.text.trim(),
+        "email": emailcontroller.text.trim(),
+        "support_email": supportemailcontroller.text.trim(),
+       "account_manager": accountmangercontroller.text.trim(),
+       "notes": notescontroller.text.trim(),
+        };
+
+
+
+        final response=await createClientService.updateclient(payload,userid);
+        
+        issucess.value=response['success']=='Client company updated'?true:false;
+        
+      }
+      catch(e)
+      {
+        Get.snackbar("Network error", "$e");
+      }
+      finally
+      {
+        isloading.value=false;
+      }
   }
   
  
