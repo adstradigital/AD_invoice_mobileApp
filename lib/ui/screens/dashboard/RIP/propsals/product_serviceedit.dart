@@ -16,12 +16,12 @@ class ProductServiceedit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final namecontroller=TextEditingController(text: product!['name']);
-    final pricecontroller= TextEditingController(text: product!['Category']=='Product'?product!['Price'].toString():
+    final pricecontroller= TextEditingController(text: product!['type']=='product'?product!['price'].toString():
     
-  product!['Rate'].toString());
-    final quantitycontroller=TextEditingController(text: product!['Category']=='Product'?product!['Qnty'].toString():
-    product!['Workers'].toString());
-    final categorycontroller=TextEditingController(text: product!['Category']);
+  product!['price'].toString());
+    final quantitycontroller=TextEditingController(text: product!['type']=='product'?product!['quantity'].toString():
+    product!['quantity'].toString());
+    final categorycontroller=TextEditingController(text: product!['type']);
 
     if(product==null)
     {
@@ -57,7 +57,7 @@ class ProductServiceedit extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                label: product!['Category']=='Product'?Text("Price"):Text("Rate per hour"),
+                label: product!['type']=='product'?Text("Price"):Text("Rate per hour"),
                 ),
             ),
             SizedBox(height: 10,),
@@ -67,7 +67,7 @@ class ProductServiceedit extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                label: product!['Category']=='Product'?Text("Quantity"):Text("Workers"),
+                label: product!['type']=='product'?Text("Quantity"):Text("Workers"),
                 ),
             ),
             SizedBox(height: 10,),
@@ -88,16 +88,16 @@ class ProductServiceedit extends StatelessWidget {
 
               };
 
-              if(product!['Category']=='Product')
+              if(product!['type']=='product')
               {
-                 updated['Price']=int.tryParse(pricecontroller.text) ?? 0;
-                updated['Qnty']=int.tryParse(quantitycontroller.text)??0;
+                 updated['price']=int.tryParse(pricecontroller.text) ?? 0;
+                updated['quantity']=int.tryParse(quantitycontroller.text)??0;
               }
 
-              else if(product!['Category']=='Service')
+              else if(product!['type']=='service')
               {
-                updated["Rate"]=int.tryParse(pricecontroller.text)??0;
-                updated['Workers']=int.tryParse(quantitycontroller.text)??0;
+                updated["price"]=int.tryParse(pricecontroller.text)??0;
+                updated['quantity']=int.tryParse(quantitycontroller.text)??0;
               }
               
               Get.back(result: updated);

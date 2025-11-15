@@ -86,8 +86,8 @@ class EmergencyInvoice extends StatelessWidget {
                               onTap: ()=> proposalsecondscreencontroller.selections(index),
                               
                             title: Text(item['name']),
-                            subtitle: item['Category']=='Product'?Text("Price :${item['Price']}\nCategory :${item['Category']}"):
-                            Text("Rate :${item['Rate']}\nCategory :${item['Category']}"),
+                            subtitle: item['type']=='product'?Text("Price :${item['price']}\nCategory :${item['type']}"):
+                            Text("Rate :${item['price']}\nCategory :${item['type']}"),
                             tileColor: isselected?Colors.blue[300]:Colors.grey[300],
                             trailing: isselected?Icon(Icons.check_outlined,color: Colors.green,):Icon(Icons.circle_outlined),
                             shape: OutlineInputBorder(

@@ -11,9 +11,9 @@ class Itemeditscreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final namecontroller=TextEditingController(text: args['name']);
-    final pricecontroller=TextEditingController(text: args['Category']=='Product'?args['Price'].toString():args['Rate'].toString());
-    final quantitycontroller=TextEditingController(text: args['Category']=='Product'?args['Qnty'].toString():args['Workers'].toString());
-    final categorycontroller=TextEditingController(text: args['Category']);
+    final pricecontroller=TextEditingController(text: args['item']=='product'?args['price'].toString():args['price'].toString());
+    final quantitycontroller=TextEditingController(text: args['category']=='product'?args['quantity'].toString():args['quantity'].toString());
+    final categorycontroller=TextEditingController(text: args['type']);
     return Scaffold(
       appBar: AppBar(title: Text("Edit"),),
       body: Padding(
@@ -37,7 +37,7 @@ class Itemeditscreen extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
-                label: args["Category"]=='Product'?Text("Price"):Text("Rate per hour"),
+                label: args["type"]=='product'?Text("Price"):Text("Rate per hour"),
               ),
               controller: pricecontroller,   
             ),
@@ -48,7 +48,7 @@ class Itemeditscreen extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15)
                 ),
-                label: args['Category']=='Product'?Text("Quantity"):Text("Workers"),
+                label: args['type']=='product'?Text("Quantity"):Text("Workers"),
               ),
             ),
             SizedBox(height: 10,),
@@ -58,7 +58,7 @@ class Itemeditscreen extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15)
                 ),
-                label: args['Category']=='Product'?Text("Quantity"):Text("Workers"),
+                label: Text("Category")
               ),
             ),
             SizedBox(height: 10,),
@@ -66,17 +66,17 @@ class Itemeditscreen extends StatelessWidget {
 
               final updated=<String,dynamic>{
                 'name':namecontroller.text,
-                'Category':categorycontroller.text,
+                'type':categorycontroller.text,
               };
-              if(args['Category']=='Product')
+              if(args['type']=='product')
               {
-                updated['Price']=int.tryParse(pricecontroller.text)??0;
-                updated['Qnty']=int.tryParse(quantitycontroller.text);
+                updated['price']=int.tryParse(pricecontroller.text)??0;
+                updated['quantity']=int.tryParse(quantitycontroller.text);
               }
-              else if(args['Category']=='Service')
+              else if(args['category']=='service')
               {
-                updated['Rate']=int.tryParse(pricecontroller.text)??0;
-                updated['Workers']=int.tryParse(quantitycontroller.text)??0;
+                updated['price']=int.tryParse(pricecontroller.text)??0;
+                updated['quantity']=int.tryParse(quantitycontroller.text)??0;
               }
               Get.back(result: updated);
             })

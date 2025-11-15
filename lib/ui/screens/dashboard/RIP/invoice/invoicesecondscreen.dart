@@ -100,14 +100,14 @@ late List<Map<String,dynamic>> items;
                       {
                         if(index>=items.length) return SizedBox.shrink();
                         final item=items[index];
-                        final isproduct=item['item_type']=='product';
+                        final isproduct=item['type']=='product';
                         return Card(
                           elevation: 6,
                           child: ListTile(
                             isThreeLine: true,
                             title: Text(item['name']),
-                            subtitle: isproduct?Text("Price:${item['price']}\nQuantity:${item['quantity']}\n${item['item_type']}"):
-                            Text("Rate:${item['price']}\nWorkers:${item['quantity']}\n${item['item_type']}"),
+                            subtitle: isproduct?Text("Price:${item['price']}\nQuantity:${item['quantity']}\n${item['type']}"):
+                            Text("Rate:${item['price']}\nWorkers:${item['quantity']}\n${item['type']}"),
                             trailing: IconButton(onPressed: () async{
                                 final updated=await Get.to(()=>Itemeditscreen(),arguments: item 
                                 );
